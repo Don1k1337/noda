@@ -8,6 +8,12 @@
     <title>Testing</title>
 </head>
 <body>
+<% if (session.error) { %>
+<section class="errors">
+    <p><%= session.error %></p>
+    <% session.error = undefined %>
+</section>
+<% } %>
   <section class="messages">
       <% for (let i = 0; i < messages.length; i++) { %>
           <div class="message">
