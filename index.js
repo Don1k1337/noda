@@ -1,19 +1,23 @@
+// .env config read
 const dotenv = require('dotenv');
 dotenv.config();
+// express init
 const express = require('express');
-const session = require("express-session");
 const app = express();
-const messages = []
-
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static('public'))
+// session init
+const session = require('express-session');
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }))
-app.use(express.static('public'))
+// reader init
+const fs = require('fs')
+const messages = JSON.parse(fs.readFileSync('./data/messages.json', 'utf8'))
 
 app.get('/', (req, res) => {
   res.render('index', { messages, session: req.session })
@@ -25,6 +29,7 @@ app.post('/message/create', (req, res) => {
   const message = body.message
   if (name && message) {
     messages.push({name, message})
+    fs.writeFileSync('./data/messages.json', JSON.stringify(messages))
   } else {
     req.session.error = 'Name or content cannot be empty!'
   }
