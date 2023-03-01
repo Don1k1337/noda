@@ -26,33 +26,40 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }))
-// db query
+// main db query init
 const query = util
     .promisify(db.query)
     .bind(db);
 
+// Requests
 app.get('/', async (req, res) => {
   try {
-    const rows = await query('SELECT * FROM messages');
-    res.render('index', { messages: rows, session: req.session });
+    const messages = await query('SELECT * FROM messages');
+    res.render('index', { messages, session: req.session });
   } catch (e) {
-    console.log('Failed to load entries from db', e);
+    console.error('Failed to load entries from db', e);
     res.status(500).end();
   }
 });
-app.post('/message/create', (req, res) => {
+
+app.post('/message/create', async(req, res) => {
   const body = req.body
   const name = body.name
   const message = body.message
-  if (name && message) {
-    messages.push({name, message})
-    // fs.writeFileSync('./data/messages.json', JSON.stringify(messages))
-  } else {
-    req.session.error = 'Name or content cannot be empty!'
+  try {
+    if (name && message) {
+      await query(`INSERT INTO messages (name, message) VALUES (?, ?)`, [name, message])
+    } else {
+      req.session.error = 'Name or content cannot be empty!'
+    }
+  } catch (e) {
+     console.error('Failed to create entry in the db', e);
+     res.status(500).end();
   }
   res.redirect('/')
 })
 
+// Runner
 app.listen(process.env.APP_PORT, () => {
-  console.log('App listening on port 3000!');
+  console.log(`App listening on port ${process.env.APP_PORT}`);
 });
