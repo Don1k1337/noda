@@ -1,3 +1,9 @@
+/*
+   db.js
+   This is the main file for initialization of connection
+   between server & database. It uses it utility method .promisify for creating
+   a Promise like and async behavior to avoid a callback hell
+*/
 const util = require('util');
 const mysql = require('mysql')
 const { db } = require('./config')

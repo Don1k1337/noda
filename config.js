@@ -1,3 +1,8 @@
+/*
+   config.js
+   This is the main file for the server-side configurations.
+   It uses .env variables with defined names for db, session
+*/
 const dotenv = require('dotenv');
 dotenv.config();
 

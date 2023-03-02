@@ -1,7 +1,7 @@
 {
   "name": "servak",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.3",
@@ -11,6 +11,6 @@
     "mysql": "^2.18.1"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   }
 }

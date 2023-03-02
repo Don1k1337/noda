@@ -1,3 +1,9 @@
+/*
+   app.js
+   This is the main file for the server-side logic of the application.
+   It sets up the express server, connects to the database, and defines the
+   routes for handling incoming requests.
+*/
 const express = require('express');
 const config = require('./config');
 const { query } = require('./db');
